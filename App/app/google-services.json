@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "178704686462",
+    "project_id": "fructiapp-b30a5",
+    "storage_bucket": "fructiapp-b30a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178704686462:android:7cbbed78702fcb17a6a72f",
+        "android_client_info": {
+          "package_name": "com.example.fructiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178704686462-7ble26jgnrt8tvjmgvil6k7qudetoio2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5q8fOiAK03zlUf75Lf--Lkdn4kgxISK0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178704686462-7ble26jgnrt8tvjmgvil6k7qudetoio2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
