@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Fructiapp</string>
+    <string name="btnFacebook">Button</string>
 </resources>
