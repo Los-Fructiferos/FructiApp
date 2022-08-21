@@ -79,6 +79,7 @@
         app:layout_constraintTop_toBottomOf="@+id/inputPasswordL" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -111,6 +112,7 @@
 
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="110dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/btn_bg"
         android:drawableStart="@drawable/ic_google"
@@ -121,13 +123,14 @@
         app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="511dp" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/btnFacebook"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="111dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/btn_bg"
         android:drawableStart="@drawable/ic_facebook"
@@ -139,7 +142,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnGoogle"
-        app:layout_constraintTop_toTopOf="@+id/btnGoogle" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
