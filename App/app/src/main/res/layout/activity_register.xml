@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.13" />
 
     <EditText
-        android:id="@+id/inputPasswordL"
+        android:id="@+id/inputUsername"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -63,9 +63,9 @@
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/inputPasswordL"
-        app:layout_constraintStart_toStartOf="@+id/inputPasswordL"
-        app:layout_constraintTop_toBottomOf="@+id/inputPasswordL" />
+        app:layout_constraintEnd_toEndOf="@+id/inputUsername"
+        app:layout_constraintStart_toStartOf="@+id/inputUsername"
+        app:layout_constraintTop_toBottomOf="@+id/inputUsername" />
 
     <EditText
         android:id="@+id/inputPassword"
@@ -113,6 +113,7 @@
         android:id="@+id/btnRegister"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
         android:background="@drawable/btn_bg"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
@@ -121,7 +122,7 @@
         android:text="Register"
         app:layout_constraintEnd_toEndOf="@+id/inputConfirmPassword"
         app:layout_constraintStart_toStartOf="@+id/inputConfirmPassword"
-        tools:layout_editor_absoluteY="469dp" />
+        app:layout_constraintTop_toBottomOf="@+id/inputConfirmPassword" />
 
     <TextView
         android:id="@+id/yatienescuenta"
