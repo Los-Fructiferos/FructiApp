@@ -125,24 +125,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <Button
+
+
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/btnFacebook"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="111dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/btn_bg"
-        android:drawableStart="@drawable/ic_facebook"
-        android:drawableLeft="@drawable/ic_facebook"
-        android:paddingLeft="20dp"
-        android:text="Facebook"
-        android:textAlignment="center"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnGoogle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toTopOf="@+id/btnGoogle" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
