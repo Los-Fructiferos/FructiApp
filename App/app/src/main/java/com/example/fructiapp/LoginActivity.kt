@@ -63,7 +63,9 @@ class LoginActivity : AppCompatActivity() {
              FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
                  Log.d(TAG, "facebook:onSuccess:$loginResult")
+
                  handleFacebookAccessToken(loginResult.accessToken)
+
              }
 
              override fun onCancel() {
@@ -94,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
              val pass = binding.inputPasswordL.text.toString()
 
              if (email.isNotEmpty() && pass.isNotEmpty()) {
-                     firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+                     auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
                          if (it.isSuccessful) {
                              //val intent = Intent(this, LoginActivity::class.java)
                              Toast.makeText(this, "Logged in!!", Toast.LENGTH_SHORT).show()
@@ -144,7 +146,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String){
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential)
+        auth.signInWithCredential(credential)
             .addOnCompleteListener(this) {task ->
                 if (task.isSuccessful){
                     Log.d("LoginActivity", "signInWithCredential:success")
@@ -171,6 +173,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
+                    Toast.makeText(this, "Logged in!!", Toast.LENGTH_SHORT).show()
                     val user = auth.currentUser
                     startActivity(Intent(this, MainActivity::class.java))
                 } else {
