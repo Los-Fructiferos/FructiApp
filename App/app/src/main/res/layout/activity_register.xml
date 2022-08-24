@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RegisterActivity"
-    android:background="@drawable/bb"
+    android:background="@drawable/fructifero"
     >
 
     <TextView
@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:textColor="@color/white"
+        android:layout_marginBottom="196dp"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="96dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/input_bg"
         android:drawableLeft="@drawable/ic_baseline_person_24"
@@ -39,8 +40,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,8 +62,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="@+id/inputUsername"
         app:layout_constraintStart_toStartOf="@+id/inputUsername"
         app:layout_constraintTop_toBottomOf="@+id/inputUsername" />
@@ -82,8 +83,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="@+id/inputEmail"
         app:layout_constraintStart_toStartOf="@+id/inputEmail"
         app:layout_constraintTop_toBottomOf="@+id/inputEmail" />
@@ -103,8 +104,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="@+id/inputPassword"
         app:layout_constraintStart_toStartOf="@+id/inputPassword"
         app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
@@ -129,10 +130,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:shadowColor="@color/white"
+        android:shadowColor="@color/darkBlue"
         android:text="Already have an account?"
-        android:textColor="@color/white"
+        android:textColor="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="@+id/btnRegister"
         app:layout_constraintStart_toStartOf="@+id/btnRegister"
         app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="36dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="@+id/btnRegister"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnRegister"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bb"
+    android:background="@drawable/fructifero"
     tools:context=".LoginActivity">
 
     <TextView
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:textColor="@color/white"
+        android:layout_marginBottom="196dp"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,6 +21,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.13" />
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginTop="36dp"
+        android:src="@mipmap/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="@+id/inputEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/inputEmail"
+        app:layout_constraintTop_toBottomOf="@+id/logo"/>
 
     <EditText
         android:id="@+id/inputPasswordL"
@@ -38,8 +51,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +62,7 @@
         android:id="@+id/inputEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="146dp"
         android:background="@drawable/input_bg"
         android:drawableLeft="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
@@ -60,8 +73,8 @@
         android:paddingTop="10dp"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+        android:textColor="@color/darkBlue"
+        android:textColorHint="@color/darkBlue"
         app:layout_constraintEnd_toEndOf="@+id/inputPasswordL"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/inputPasswordL"
@@ -71,7 +84,7 @@
         android:id="@+id/btnlogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="74dp"
         android:background="@drawable/btn_bg"
         android:text="Login"
         app:layout_constraintEnd_toEndOf="@+id/inputPasswordL"
@@ -95,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dont have an account? "
-            android:textColor="@color/white" />
+            android:textColor="@color/darkBlue" />
 
         <TextView
             android:id="@+id/singuptext"
