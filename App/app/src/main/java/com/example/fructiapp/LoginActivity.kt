@@ -2,189 +2,116 @@ package com.example.fructiapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import com.example.fructiapp.MainActivity
 import androidx.appcompat.app.AppCompatActivity
-import com.example.fructiapp.databinding.ActivityLoginBinding
-import com.facebook.*
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
-import com.google.firebase.auth.FacebookAuthProvider
 
 class LoginActivity : AppCompatActivity() {
 
-    var callbackManager = CallbackManager.Factory.create()
-    var auth = FirebaseAuth.getInstance()
-    var TAG=""
-
-    companion object{
-        private const val RC_SIGN_IN = 120
+    // [START auth_fui_create_launcher]
+    // See: https://developer.android.com/training/basics/intents/result
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) { res ->
+        this.onSignInResult(res)
     }
+    // [END auth_fui_create_launcher]
 
-     private lateinit var binding: ActivityLoginBinding
-     private lateinit var firebaseAuth: FirebaseAuth
-     private lateinit var googleSignInClient: GoogleSignInClient
-
-
-     override fun onCreate(savedInstanceState: Bundle?) {
-         super.onCreate(savedInstanceState)
-         binding = ActivityLoginBinding.inflate(layoutInflater)
-         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-             .requestIdToken(getString(R.string.default_web_client_id))
-             .requestEmail()
-             .build()
-
-         googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-         setContentView(binding.root)
-
-         var loginbutton = findViewById<LoginButton>(R.id.btnFacebook)
-
-         loginbutton.setOnClickListener{
-             if(userLoggedIn()){
-                    auth.signOut();
-             }else{
-                 LoginManager.getInstance().logInWithReadPermissions(this, listOf("public_profile", "email"))
-             }
-         }
-
-
-         LoginManager.getInstance().registerCallback(callbackManager, object :
-             FacebookCallback<LoginResult> {
-            override fun onSuccess(loginResult: LoginResult) {
-                 Log.d(TAG, "facebook:onSuccess:$loginResult")
-
-                 handleFacebookAccessToken(loginResult.accessToken)
-
-             }
-
-             override fun onCancel() {
-                 Log.d(TAG, "facebook:onCancel")
-                 // ...
-             }
-
-             override fun onError(error: FacebookException) {
-                 Log.d(TAG, "facebook:onError", error)
-                 // ...
-             }
-         })
-         // ...
-
-
-
-         binding.singuptext.setOnClickListener{
-             val intent = Intent(this, RegisterActivity::class.java)
-             startActivity(intent);
-         }
-
-         binding.btnGoogle.setOnClickListener{
-             signIn()
-         }
-
-         binding.btnlogin.setOnClickListener {
-             val email = binding.inputEmail.text.toString()
-             val pass = binding.inputPasswordL.text.toString()
-
-             if (email.isNotEmpty() && pass.isNotEmpty()) {
-                     auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-                         if (it.isSuccessful) {
-                             //val intent = Intent(this, LoginActivity::class.java)
-                             Toast.makeText(this, "Logged in!!", Toast.LENGTH_SHORT).show()
-                         } else {
-                             Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
-                         }
-                     }
-
-             } else {
-                 Toast.makeText(this, "Don't leave empty fields.", Toast.LENGTH_SHORT).show()
-             }
-         }
-     }
-
-    private fun userLoggedIn(): Boolean {
-        if(auth.currentUser != null && !AccessToken.getCurrentAccessToken()!!.isExpired ){
-            return true
-        }
-
-        return false
-    }
-
-    private fun signIn(){
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            val exception = task.exception
-            if (task.isSuccessful) {
-                try {
-                    val account = task.getResult(ApiException::class.java)!!
-                    Log.d("LoginActivity", "firebaseAuthWithGoogle" + account.id)
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException){
-                Log.w("LoginActivity", "Google sign in failed", e)
-                }
-            } else {
-                Log.w("LoginActivity", exception.toString())
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
+            createSignInIntent()
+        } else {
+            //moverse al main activity
+            Intent(this, MainActivity::class.java).also {
+                startActivity(it)
             }
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String){
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) {task ->
-                if (task.isSuccessful){
-                    Log.d("LoginActivity", "signInWithCredential:success")
-                    Toast.makeText(this, "Logged in!!", Toast.LENGTH_SHORT).show()
-                }else{
-                    Log.w("LoginActivity", "signInWithCredential:failuure", task.exception)
-                }
+    private fun showSnackbar(message: String) {
+        // [START_EXCLUDE]
+        val snackbar = Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT)
+        snackbar.show()
+        // [END_EXCLUDE]
+    }
+
+    private fun createSignInIntent() {
+        // [START auth_fui_create_intent]
+        // Choose authentication providers
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build(),
+            AuthUI.IdpConfig.FacebookBuilder().build())
+
+        // Create and launch sign-in intent
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            //por motivos de desarollo, borrar despues ...
+            //evita que al cerrar y volver a abrir se mantenga sesion iniciada:
+            .setIsSmartLockEnabled(false, true)
+            .setAvailableProviders(providers)
+            .setLogo(R.mipmap.ic_launcher_foreground) // Set logo drawable
+            .setTheme(R.style.Theme_Fructiapp) // Set theme
+            .setTosAndPrivacyPolicyUrls(
+            "https://www.freeprivacypolicy.com/live/e7d3b692-0fab-4d34-b99e-91e64ef9a81c",
+            "https://www.freeprivacypolicy.com/live/87c996f1-7419-4edb-bc48-b029da27596b")
+            .build()
+        signInLauncher.launch(signInIntent)
+        // [END auth_fui_create_intent]
+    }
+
+    // [START auth_fui_result]
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
+        if (result.resultCode == RESULT_OK) {
+            // Successfully signed in
+            val user = FirebaseAuth.getInstance().currentUser
+            // moverse al mainactivity
+            Intent(this, MainActivity::class.java).also {
+                startActivity(it)
             }
-    }
-
-    fun onActivityResultt(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Pass the activity result back to the Facebook SDK
-        callbackManager.onActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:$token")
-
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    Toast.makeText(this, "Logged in!!", Toast.LENGTH_SHORT).show()
-                    val user = auth.currentUser
-                    startActivity(Intent(this, MainActivity::class.java))
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-
-                }
+        } else {
+            if (response == null) {
+                // User pressed back button
+                //show a snackbar with a message
+                showSnackbar("Inicio de sesión cancelado")
+                return;
             }
+            if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
+                //show a snackbar with a message
+                showSnackbar("Sin conexion a internet")
+                return;
+            }
+        }
+    }
+    // [END auth_fui_result]
+
+    private fun signOut() {
+        // [START auth_fui_signout]
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnCompleteListener {
+                // ...
+            }
+        // [END auth_fui_signout]
     }
 
+    private fun delete() {
+        // [START auth_fui_delete]
+        AuthUI.getInstance()
+            .delete(this)
+            .addOnCompleteListener {
+                // ...
+            }
+        // [END auth_fui_delete]
+    }
 
 }
