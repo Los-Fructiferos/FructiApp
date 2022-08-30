@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
             createSignInIntent()
@@ -79,15 +79,13 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(it)
             }
         } else {
+            /*if (response != null) {
+                showSnackbar(response.error!!.message!!)
+            }*/
             if (response == null) {
                 // User pressed back button
                 //show a snackbar with a message
                 showSnackbar("Inicio de sesión cancelado")
-                return;
-            }
-            if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
-                //show a snackbar with a message
-                showSnackbar("Sin conexion a internet")
                 return;
             }
         }
