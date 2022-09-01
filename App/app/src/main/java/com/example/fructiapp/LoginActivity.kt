@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
             createSignInIntent()
         } else {
             //moverse al main activity
-            Intent(this, MainActivity::class.java).also {
+            Intent(this, CameraActivity::class.java).also {
                 startActivity(it)
             }
         }
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
             // moverse al mainactivity
-            Intent(this, MainActivity::class.java).also {
+            Intent(this, CameraActivity::class.java).also {
                 startActivity(it)
             }
         } else {
