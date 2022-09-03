@@ -1,6 +1,7 @@
 package com.example.fructiapp
 
 import android.Manifest
+import android.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -36,6 +37,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import androidx.camera.lifecycle.ProcessCameraProvider
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
 class CameraActivity : AppCompatActivity() {
@@ -114,6 +116,12 @@ class CameraActivity : AppCompatActivity() {
                     bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true)
                 activityCameraBinding.imagePredicted.setImageBitmap(uprightImage)
                 activityCameraBinding.imagePredicted.visibility = View.VISIBLE
+
+                val bottomSheetFragment = BottomSheet()
+
+                bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")
+
+
             }
 
             // Re-enable camera controls
