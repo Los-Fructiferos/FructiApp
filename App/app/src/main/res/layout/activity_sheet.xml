@@ -13,13 +13,51 @@
         android:layout_height="wrap_content"
 
         android:layout_margin="20dp"
-        android:gravity="center"
-        android:text="Nombre del producto"
+        android:gravity="left"
+        android:text="Fruta: Banana"
         android:textColor="@color/blue"
-        android:textSize="25sp"
+        android:textSize="18sp"
 
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
+        android:layout_margin="40dp"
+        android:gravity="left"
+        android:text="Estado: Madura"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+
+        tools:layout_editor_absoluteX="20dp"
+        tools:layout_editor_absoluteY="24dp" /><![CDATA[
+
+    tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="48dp" />
+
+
+
+    ]]>
+
+    <TextView
+        android:layout_width="221dp"
+        android:layout_height="311dp"
+
+        android:layout_gravity="center_vertical|end"
+        android:layout_margin="40dp"
+        android:gravity="left"
+        android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+        android:textColor="@color/blue"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="48dp"/>
+
+    <ImageView
+        android:layout_width="114dp"
+        android:layout_height="82dp"
+
+        tools:layout_editor_absoluteX="281dp"
+        tools:layout_editor_absoluteY="48dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
