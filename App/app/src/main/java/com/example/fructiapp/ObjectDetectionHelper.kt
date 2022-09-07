@@ -26,9 +26,15 @@ class ObjectDetectionHelper(private val tflite: Interpreter, private val labels:
     val predictions get() = (0 until OBJECT_COUNT).map {
         ObjectPrediction(
 
-            // The locations are an array of [0, 1] floats for [top, left, bottom, right]
             location = locations[0][it].let {
-                RectF(it[1], it[0], it[3], it[2])
+                //formato oficial: https://cloud.google.com/vision/automl/object-detection/docs/csv-format
+                // The locations are an array of [0, 1] floats for [top, left, bottom, right]
+                RectF(
+                    it[1],
+                    it[0],
+                    it[3],
+                    it[2]
+                )
             },
 
             // SSD Mobilenet V1 Model assumes class 0 is background class
@@ -44,9 +50,6 @@ class ObjectDetectionHelper(private val tflite: Interpreter, private val labels:
     fun predict(image: TensorImage): List<ObjectPrediction> {
         tflite.runForMultipleInputsOutputs(arrayOf(image.buffer), outputBuffer)
         //console log predictions
-        predictions.forEach {
-            println("$it")
-        }
         return predictions
     }
 
