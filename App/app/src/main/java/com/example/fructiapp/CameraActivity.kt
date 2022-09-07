@@ -255,7 +255,8 @@ class CameraActivity : AppCompatActivity() {
 
         // Location has to be mapped to our local coordinates
         val location = mapOutputCoordinates(prediction.location)
-
+        //wuuu
+        println(location)
         // Update the text and UI
         activityCameraBinding.textPrediction.text = "${"%.2f".format(prediction.score)} ${prediction.label}"
         (activityCameraBinding.boxPrediction.layoutParams as ViewGroup.MarginLayoutParams).apply {
