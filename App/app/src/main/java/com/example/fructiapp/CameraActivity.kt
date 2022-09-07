@@ -1,51 +1,52 @@
 package com.example.fructiapp
 
 import android.Manifest
-import android.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.RectF
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
-import kotlin.math.min
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
-import androidx.camera.core.CameraSelector
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.example.fructiapp.databinding.ActivityCameraBinding
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.DataType
 import androidx.lifecycle.LifecycleOwner
-import org.tensorflow.lite.nnapi.NnApiDelegate
+import com.example.fructiapp.databinding.ActivityCameraBinding
+import com.example.fructiapp.databinding.ActivitySheetBinding
+import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
 import org.tensorflow.lite.support.image.ops.Rot90Op
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 import kotlin.random.Random
-import androidx.camera.lifecycle.ProcessCameraProvider
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
 class CameraActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySheetBinding
 
     private lateinit var activityCameraBinding: ActivityCameraBinding
 
     private lateinit var bitmapBuffer: Bitmap
-
+    private var results: List<ObjectDetectionHelper.ObjectPrediction>? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val permissions = listOf(Manifest.permission.CAMERA)
     private val permissionsRequestCode = Random.nextInt(0, 10000)
@@ -117,6 +118,19 @@ class CameraActivity : AppCompatActivity() {
                 activityCameraBinding.imagePredicted.setImageBitmap(uprightImage)
                 activityCameraBinding.imagePredicted.visibility = View.VISIBLE
 
+                //setContentView(R.layout.activity_sheet)
+
+                /*val title: TextView = findViewById(R.id.viewTitle) as TextView
+                title.text = "CONSEGUIDO"
+
+                val desc: TextView = findViewById(R.id.viewTitle) as TextView
+                desc.text = "FALTA COMBINAR A JOSE"
+
+                val state: TextView = findViewById(R.id.viewTitle) as TextView
+                state.text = "LOGRADO"*/
+                binding.viewTitle.text = "INTERESANTE"
+                binding.viewDesc.text = "DESC"
+                binding.viewState.text = "STATE"
                 val bottomSheetFragment = BottomSheet()
 
                 bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")
@@ -193,6 +207,11 @@ class CameraActivity : AppCompatActivity() {
 
                 // Perform the object detection for the current frame
                 val predictions = detector.predict(tfImage)
+                results = predictions
+
+
+
+
 
                 // Report only the top prediction
                 reportPrediction(predictions.maxByOrNull { it.score })
