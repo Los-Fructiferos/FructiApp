@@ -352,7 +352,7 @@ class CameraActivity : AppCompatActivity() {
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
 
-        private const val ACCURACY_THRESHOLD = 0.003f
+        private const val ACCURACY_THRESHOLD = 0.65f
         private const val MODEL_PATH = "model.tflite"
         private const val LABELS_PATH = "labels.txt"
     }
