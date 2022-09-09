@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -20,6 +21,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
@@ -40,7 +42,7 @@ import kotlin.random.Random
 
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : Fragment() {
     private lateinit var binding: ActivitySheetBinding
 
     private lateinit var activityCameraBinding: ActivityCameraBinding
@@ -75,13 +77,13 @@ class CameraActivity : AppCompatActivity() {
 
     private val tflite by lazy {
         Interpreter(
-            FileUtil.loadMappedFile(this, MODEL_PATH),
+            FileUtil.loadMappedFile(activity as AppCompatActivity, MODEL_PATH),
             Interpreter.Options().addDelegate(nnApiDelegate))
     }
     private val detector by lazy {
         ObjectDetectionHelper(
             tflite,
-            FileUtil.loadLabels(this, LABELS_PATH)
+            FileUtil.loadLabels(activity as AppCompatActivity, LABELS_PATH)
         )
     }
 
@@ -91,11 +93,9 @@ class CameraActivity : AppCompatActivity() {
         Size(inputShape[2], inputShape[1]) // Order of axis is: {1, height, width, 3}
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
         activityCameraBinding = ActivityCameraBinding.inflate(layoutInflater)
-        setContentView(activityCameraBinding.root)
-
         activityCameraBinding.cameraCaptureButton.setOnClickListener {
 
             // Disable all camera controls
@@ -133,7 +133,7 @@ class CameraActivity : AppCompatActivity() {
                 binding.viewState.text = "STATE"
                 val bottomSheetFragment = BottomSheet()
 
-                bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")
+                bottomSheetFragment.show(requireActivity().supportFragmentManager,"BottomSheetDialog")
 
 
             }
@@ -141,6 +141,8 @@ class CameraActivity : AppCompatActivity() {
             // Re-enable camera controls
             it.isEnabled = true
         }
+
+        return activityCameraBinding.root
     }
 
     override fun onDestroy() {
@@ -161,7 +163,7 @@ class CameraActivity : AppCompatActivity() {
     /** Declare and bind preview and analysis use cases */
     private fun bindCameraUseCases() = activityCameraBinding.viewFinder.post {
 
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity as AppCompatActivity)
         cameraProviderFuture.addListener ({
 
             // Camera provider is now guaranteed to be available
@@ -239,7 +241,7 @@ class CameraActivity : AppCompatActivity() {
             // Use the camera object to link our preview use case with the view
             preview.setSurfaceProvider(activityCameraBinding.viewFinder.surfaceProvider)
 
-        }, ContextCompat.getMainExecutor(this))
+        }, ContextCompat.getMainExecutor(activity as AppCompatActivity))
     }
 
     private fun reportPrediction(
@@ -323,9 +325,9 @@ class CameraActivity : AppCompatActivity() {
         super.onResume()
 
         // Request permissions each time the app resumes, since they can be revoked at any time
-        if (!hasPermissions(this)) {
+        if (!hasPermissions(activity as AppCompatActivity)) {
             ActivityCompat.requestPermissions(
-                this, permissions.toTypedArray(), permissionsRequestCode)
+                activity as AppCompatActivity, permissions.toTypedArray(), permissionsRequestCode)
         } else {
             bindCameraUseCases()
         }
@@ -337,10 +339,10 @@ class CameraActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == permissionsRequestCode && hasPermissions(this)) {
+        if (requestCode == permissionsRequestCode && hasPermissions(activity as AppCompatActivity)) {
             bindCameraUseCases()
         } else {
-            finish() // If we don't have the required permissions, we can't run
+            activity?.finish() // If we don't have the required permissions, we can't run
         }
     }
 
@@ -355,5 +357,10 @@ class CameraActivity : AppCompatActivity() {
         private const val ACCURACY_THRESHOLD = 0.65f
         private const val MODEL_PATH = "model.tflite"
         private const val LABELS_PATH = "labels.txt"
+
+        @JvmStatic
+        fun newInstance(): CameraActivity {
+            return CameraActivity()
+        }
     }
 }
