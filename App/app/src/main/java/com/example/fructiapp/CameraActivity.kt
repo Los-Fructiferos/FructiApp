@@ -176,7 +176,6 @@ class CameraActivity : AppCompatActivity() {
 
         textOneTV.setText(("JOSE").toString())
 
-        textTwoTV.setText(("JOSE").toString())
     }
 
     override fun onDestroy() {
