@@ -1,6 +1,7 @@
 package com.example.fructiapp
 
 import android.Manifest
+import com.example.fructiapp.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,9 +10,12 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -23,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
@@ -42,7 +47,7 @@ import kotlin.random.Random
 /** Activity that displays the camera and performs object detection on the incoming frames */
 class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySheetBinding
-
+    var bottomSheetRL: RelativeLayout? = null
     private lateinit var activityCameraBinding: ActivityCameraBinding
 
     private lateinit var bitmapBuffer: Bitmap
@@ -128,12 +133,11 @@ class CameraActivity : AppCompatActivity() {
 
                 val state: TextView = findViewById(R.id.viewTitle) as TextView
                 state.text = "LOGRADO"*/
-                binding.viewTitle.text = "INTERESANTE"
-                binding.viewDesc.text = "DESC"
-                binding.viewState.text = "STATE"
-                val bottomSheetFragment = BottomSheet()
+                bottomSheetRL = findViewById(R.id.idRLBottomSheet)
+                displayBottomSheet()
+                /*val bottomSheetFragment = BottomSheet()
 
-                bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")
+                bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")*/
 
 
             }
@@ -141,6 +145,38 @@ class CameraActivity : AppCompatActivity() {
             // Re-enable camera controls
             it.isEnabled = true
         }
+    }
+
+    private fun displayBottomSheet() {
+
+        // creating a variable for our bottom sheet dialog.
+        val bottomSheetTeachersDialog =
+            BottomSheetDialog(this@CameraActivity, R.style.BottomSheetDialogTheme)
+
+        // passing a layout file for our bottom sheet dialog.
+        val layout: View = LayoutInflater.from(this@CameraActivity)
+            .inflate(R.layout.activity_sheet_layout, bottomSheetRL)
+
+        // passing our layout file to our bottom sheet dialog.
+        bottomSheetTeachersDialog.setContentView(layout)
+
+        // below line is to set our bottom sheet dialog as cancelable.
+        bottomSheetTeachersDialog.setCancelable(false)
+
+        // below line is to set our bottom sheet cancelable.
+        bottomSheetTeachersDialog.setCanceledOnTouchOutside(true)
+
+        // below line is to display our bottom sheet dialog.
+        bottomSheetTeachersDialog.show()
+
+        // initializing our text views and image views.
+       // val imageIV: ImageView = layout.findViewById(R.id.idIVimage)
+        val textOneTV = layout.findViewById<TextView>(R.id.idTVtext)
+        val textTwoTV = layout.findViewById<TextView>(R.id.idTVtextTwo)
+
+        textOneTV.setText(("JOSE").toString())
+
+        textTwoTV.setText(("JOSE").toString())
     }
 
     override fun onDestroy() {
@@ -255,8 +291,7 @@ class CameraActivity : AppCompatActivity() {
 
         // Location has to be mapped to our local coordinates
         val location = mapOutputCoordinates(prediction.location)
-        //wuuu
-        println(location)
+
         // Update the text and UI
         activityCameraBinding.textPrediction.text = "${"%.2f".format(prediction.score)} ${prediction.label}"
         (activityCameraBinding.boxPrediction.layoutParams as ViewGroup.MarginLayoutParams).apply {
