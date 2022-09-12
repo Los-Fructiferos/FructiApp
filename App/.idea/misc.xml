@@ -9,11 +9,13 @@
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/activity_main.xml" value="0.2042483660130719" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/activity_register.xml" value="0.264" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/activity_sheet.xml" value="0.259375" />
+        <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/activity_sign_in.xml" value="0.259375" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/activity_ui.xml" value="0.25833333333333336" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/dimens.xml" value="0.259375" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/fragment_camara.xml" value="0.13653136531365315" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/fragment_config.xml" value="0.259375" />
-        <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/fragment_historial.xml" value="0.259375" />
+        <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/fragment_historial.xml" value="0.16824324324324325" />
+        <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/historial_item.xml" value="0.4" />
         <entry key="..\:/Android/AndroidStudioProjects/FructiApp/App/app/src/main/res/layout/splash_screen.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/Juda/Desktop/FructiApp/App/app/src/main/res/layout/activity_login.xml" value="0.5" />
         <entry key="..\:/Users/Juda/Desktop/FructiApp/App/app/src/main/res/layout/activity_register.xml" value="0.358695652173913" />
