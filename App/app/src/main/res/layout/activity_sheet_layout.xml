@@ -13,7 +13,9 @@
         android:id="@+id/idIVimage"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:padding="5dp" />
 
     <!--Text view for displaying a heading text-->
@@ -30,13 +32,16 @@
         android:textStyle="bold" />
 
     <!--Text View for displaying description text-->
+
     <TextView
         android:id="@+id/idTVtextTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/idTVtext"
-        android:layout_margin="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@id/idIVimage"
         android:padding="5dp"
         android:text="Message Two"
@@ -48,8 +53,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/idTVtext"
-        android:layout_margin="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@id/idIVimage"
         android:padding="5dp"
         android:text="Message Two"
