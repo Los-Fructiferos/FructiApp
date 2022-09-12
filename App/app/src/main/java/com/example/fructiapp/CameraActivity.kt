@@ -1,7 +1,6 @@
 package com.example.fructiapp
 
 import android.Manifest
-import com.example.fructiapp.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,9 +12,9 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -42,7 +41,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.min
 import kotlin.random.Random
-
+import com.squareup.picasso.Picasso;
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
 class CameraActivity : AppCompatActivity() {
@@ -173,10 +172,27 @@ class CameraActivity : AppCompatActivity() {
        // val imageIV: ImageView = layout.findViewById(R.id.idIVimage)
         val textOneTV = layout.findViewById<TextView>(R.id.idTVtext)
         val textTwoTV = layout.findViewById<TextView>(R.id.idTVtextTwo)
+        val imageIV = layout.findViewById<ImageView>(R.id.idIVimage)
+        val desc = layout.findViewById<TextView>(R.id.desc)
 
-        textOneTV.setText(("JOSE").toString())
+        var titulo = "CONSEGUIDO"
+        var estado = "LOGRADO"
+        var descripcion = "FALTA COMBINAR A JOSE"
 
-        textTwoTV.setText(("JOSE").toString())
+        val matrix = Matrix().apply {
+            postRotate(imageRotationDegrees.toFloat())
+            if (isFrontFacing) postScale(-1f, 1f)
+        }
+        var imagen = Bitmap.createBitmap(
+            bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true)
+
+        //CLASIFICACIÓN DE OBJETOS
+
+
+        textOneTV.setText((titulo).toString())
+        desc.setText((descripcion))
+        imageIV.setImageBitmap(imagen)
+        textTwoTV.setText((estado).toString())
     }
 
     override fun onDestroy() {

@@ -43,4 +43,17 @@
         android:textColor="@color/black"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/idTVtext"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/idIVimage"
+        android:padding="5dp"
+        android:text="Message Two"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
 </RelativeLayout>
