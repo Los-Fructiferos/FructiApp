@@ -193,6 +193,7 @@ class CameraActivity : AppCompatActivity() {
         desc.setText((descripcion))
         imageIV.setImageBitmap(imagen)
         textTwoTV.setText((estado).toString())
+
     }
 
     override fun onDestroy() {
