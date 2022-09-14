@@ -12,6 +12,8 @@ import android.util.Size
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
@@ -25,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
@@ -39,12 +42,12 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.math.min
 import kotlin.random.Random
-
+import com.squareup.picasso.Picasso;
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
 class CameraActivity : Fragment() {
     private lateinit var binding: ActivitySheetBinding
-
+    var bottomSheetRL: RelativeLayout? = null
     private lateinit var activityCameraBinding: ActivityCameraBinding
 
     private lateinit var bitmapBuffer: Bitmap
@@ -128,12 +131,10 @@ class CameraActivity : Fragment() {
 
                 val state: TextView = findViewById(R.id.viewTitle) as TextView
                 state.text = "LOGRADO"*/
-                binding.viewTitle.text = "INTERESANTE"
-                binding.viewDesc.text = "DESC"
-                binding.viewState.text = "STATE"
-                val bottomSheetFragment = BottomSheet()
 
-                bottomSheetFragment.show(requireActivity().supportFragmentManager,"BottomSheetDialog")
+                /*val bottomSheetFragment = BottomSheet()
+
+                bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")*/
 
 
             }
@@ -141,8 +142,57 @@ class CameraActivity : Fragment() {
             // Re-enable camera controls
             it.isEnabled = true
         }
-
         return activityCameraBinding.root
+    }
+
+    private fun displayBottomSheet(label : String) {
+
+        // creating a variable for our bottom sheet dialog.
+        val bottomSheetTeachersDialog =
+            BottomSheetDialog((activity as AppCompatActivity), R.style.BottomSheetDialogTheme)
+
+        // passing a layout file for our bottom sheet dialog.
+        val layout: View = LayoutInflater.from((activity as AppCompatActivity))
+            .inflate(R.layout.activity_sheet_layout, bottomSheetRL)
+
+        // passing our layout file to our bottom sheet dialog.
+        bottomSheetTeachersDialog.setContentView(layout)
+
+        // below line is to set our bottom sheet dialog as cancelable.
+        bottomSheetTeachersDialog.setCancelable(false)
+
+        // below line is to set our bottom sheet cancelable.
+        bottomSheetTeachersDialog.setCanceledOnTouchOutside(true)
+
+        // below line is to display our bottom sheet dialog.
+        bottomSheetTeachersDialog.show()
+
+        // initializing our text views and image views.
+       // val imageIV: ImageView = layout.findViewById(R.id.idIVimage)
+        val textOneTV = layout.findViewById<TextView>(R.id.idTVtext)
+        val textTwoTV = layout.findViewById<TextView>(R.id.idTVtextTwo)
+        val imageIV = layout.findViewById<ImageView>(R.id.idIVimage)
+        val desc = layout.findViewById<TextView>(R.id.desc)
+
+        var titulo = label
+        var estado = "Pendiente"
+        var descripcion = "Pendiente IMAGE CLASSIFIER"
+
+        val matrix = Matrix().apply {
+            postRotate(imageRotationDegrees.toFloat())
+            if (isFrontFacing) postScale(-1f, 1f)
+        }
+        var imagen = Bitmap.createBitmap(
+            bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height, matrix, true)
+
+        //CLASIFICACIÓN DE OBJETOS
+
+
+        textOneTV.setText((titulo).toString())
+        desc.setText((descripcion))
+        imageIV.setImageBitmap(imagen)
+        textTwoTV.setText((estado).toString())
+
     }
 
     override fun onDestroy() {
@@ -257,8 +307,7 @@ class CameraActivity : Fragment() {
 
         // Location has to be mapped to our local coordinates
         val location = mapOutputCoordinates(prediction.location)
-        //wuuu
-        println(location)
+
         // Update the text and UI
         activityCameraBinding.textPrediction.text = "${"%.2f".format(prediction.score)} ${prediction.label}"
         (activityCameraBinding.boxPrediction.layoutParams as ViewGroup.MarginLayoutParams).apply {
@@ -271,6 +320,10 @@ class CameraActivity : Fragment() {
         // Make sure all UI elements are visible
         activityCameraBinding.boxPrediction.visibility = View.VISIBLE
         activityCameraBinding.textPrediction.visibility = View.VISIBLE
+        if (pauseAnalysis) {
+            bottomSheetRL = activityCameraBinding.root.findViewById(R.id.idRLBottomSheet)
+            displayBottomSheet(prediction.label)
+        }
     }
 
     /**
