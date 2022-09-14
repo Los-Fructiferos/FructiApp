@@ -132,8 +132,7 @@ class CameraActivity : AppCompatActivity() {
 
                 val state: TextView = findViewById(R.id.viewTitle) as TextView
                 state.text = "LOGRADO"*/
-                bottomSheetRL = findViewById(R.id.idRLBottomSheet)
-                displayBottomSheet()
+
                 /*val bottomSheetFragment = BottomSheet()
 
                 bottomSheetFragment.show(supportFragmentManager,"BottomSheetDialog")*/
@@ -146,7 +145,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayBottomSheet() {
+    private fun displayBottomSheet(label : String) {
 
         // creating a variable for our bottom sheet dialog.
         val bottomSheetTeachersDialog =
@@ -175,9 +174,9 @@ class CameraActivity : AppCompatActivity() {
         val imageIV = layout.findViewById<ImageView>(R.id.idIVimage)
         val desc = layout.findViewById<TextView>(R.id.desc)
 
-        var titulo = "CONSEGUIDO"
-        var estado = "LOGRADO"
-        var descripcion = "FALTA COMBINAR A JOSE"
+        var titulo = label
+        var estado = "Pendiente"
+        var descripcion = "Pendiente IMAGE CLASSIFIER"
 
         val matrix = Matrix().apply {
             postRotate(imageRotationDegrees.toFloat())
@@ -321,6 +320,10 @@ class CameraActivity : AppCompatActivity() {
         // Make sure all UI elements are visible
         activityCameraBinding.boxPrediction.visibility = View.VISIBLE
         activityCameraBinding.textPrediction.visibility = View.VISIBLE
+        if (pauseAnalysis) {
+            bottomSheetRL = findViewById(R.id.idRLBottomSheet)
+            displayBottomSheet(prediction.label)
+        }
     }
 
     /**
