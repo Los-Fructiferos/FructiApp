@@ -27,6 +27,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.mlkit.vision.common.InputImage
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
@@ -87,6 +88,10 @@ class CameraActivity : AppCompatActivity() {
             tflite,
             FileUtil.loadLabels(this, LABELS_PATH)
         )
+    }
+
+    private val classi by lazy {
+        Classifier()
     }
 
     private val tfInputSize by lazy {
@@ -275,7 +280,7 @@ class CameraActivity : AppCompatActivity() {
                     val now = System.currentTimeMillis()
                     val delta = now - lastFpsTimestamp
                     val fps = 1000 * frameCount.toFloat() / delta
-                    Log.d(TAG, "FPS: ${"%.02f".format(fps)} with tensorSize: ${tfImage.width} x ${tfImage.height}")
+                    //Log.d(TAG, "FPS: ${"%.02f".format(fps)} with tensorSize: ${tfImage.width} x ${tfImage.height}")
                     lastFpsTimestamp = now
                 }
             })
@@ -321,6 +326,11 @@ class CameraActivity : AppCompatActivity() {
         activityCameraBinding.boxPrediction.visibility = View.VISIBLE
         activityCameraBinding.textPrediction.visibility = View.VISIBLE
         if (pauseAnalysis) {
+            val image = InputImage.fromBitmap(bitmapBuffer, 0)
+            val x = classi.predict(image)
+            Log.d("CLASSIFICADOR", x.toString())
+            val predicted = x.maxByOrNull { it.score }
+            Log.d(TAG, "Prediction: ${predicted?.label} with confidence ${"%.2f".format(predicted?.score)}")
             bottomSheetRL = findViewById(R.id.idRLBottomSheet)
             displayBottomSheet(prediction.label)
         }
