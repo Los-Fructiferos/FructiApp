@@ -28,6 +28,7 @@ import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.common.internal.ImageUtils
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
@@ -89,6 +90,8 @@ class CameraActivity : AppCompatActivity() {
             FileUtil.loadLabels(this, LABELS_PATH)
         )
     }
+
+
 
     private val classi by lazy {
         Classifier()
@@ -326,7 +329,11 @@ class CameraActivity : AppCompatActivity() {
         activityCameraBinding.boxPrediction.visibility = View.VISIBLE
         activityCameraBinding.textPrediction.visibility = View.VISIBLE
         if (pauseAnalysis) {
-            val image = InputImage.fromBitmap(bitmapBuffer, 0)
+            val rotatedImage = Bitmap.createBitmap(
+                bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height,
+                Matrix().apply { postRotate(imageRotationDegrees.toFloat()) }, false)
+
+            val image = InputImage.fromBitmap(rotatedImage, 0)
             val x = classi.predict(image)
             Log.d("CLASSIFICADOR", x.toString())
             val predicted = x.maxByOrNull { it.score }

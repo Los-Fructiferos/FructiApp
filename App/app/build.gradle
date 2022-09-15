@@ -76,4 +76,7 @@ dependencies {
 
     implementation 'com.google.mlkit:image-labeling-custom:17.0.1'
     implementation 'com.google.mlkit:linkfirebase:17.0.0'
+    // MLKit
+    implementation 'com.google.mlkit:object-detection:16.2.3'
+    implementation 'com.google.mlkit:object-detection-custom:16.3.1'
 }
