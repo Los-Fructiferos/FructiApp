@@ -1,20 +1,20 @@
 package com.example.fructiapp
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.media.Image
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.objects.ObjectDetection
-import com.google.mlkit.vision.objects.ObjectDetector
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
+import kotlinx.coroutines.tasks.asDeferred
+
 /**
  * Analyzes an image using ML Kit.
  */
-class MLKitObjectDetector(val bitIm :Bitmap, val rot: Int)  {
+class MLKitObjectDetector(val bitIm : Bitmap, val rot: Int)  {
     data class DetectedObjectResult(
         val confidence: Float,
         val label: String,
@@ -26,6 +26,21 @@ class MLKitObjectDetector(val bitIm :Bitmap, val rot: Int)  {
 
     // For the ML Kit default model, use the following:
     //val builder = ObjectDetectorOptions.Builder()
+
+    fun Pair<Int, Int>.rotateCoordinates(
+        imageWidth: Int,
+        imageHeight: Int,
+        imageRotation: Int,
+    ): Pair<Int, Int> {
+        val (x, y) = this
+        return when (imageRotation) {
+            0 -> x to y
+            180 -> imageWidth - x to imageHeight - y
+            90 -> y to imageWidth - x
+            270 -> imageHeight - y to x
+            else -> error("Invalid imageRotation $imageRotation")
+        }
+    }
 
     private val options = builder
         .setDetectorMode(CustomObjectDetectorOptions.SINGLE_IMAGE_MODE)
