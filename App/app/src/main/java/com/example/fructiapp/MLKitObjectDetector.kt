@@ -21,7 +21,7 @@ class MLKitObjectDetector(val bitIm : Bitmap, val rot: Int)  {
         val centerCoordinate: Pair<Int, Int>
     )
     // To use a custom model, follow steps on https://developers.google.com/ml-kit/vision/object-detection/custom-models/android.
-    val model = LocalModel.Builder().setAssetFilePath("model.tflite").build()
+    val model = LocalModel.Builder().setAssetFilePath("modelClassifier.tflite").build()
     val builder = CustomObjectDetectorOptions.Builder(model)
 
     // For the ML Kit default model, use the following:
@@ -49,7 +49,7 @@ class MLKitObjectDetector(val bitIm : Bitmap, val rot: Int)  {
         .build()
     private val detector = ObjectDetection.getClient(options)
 
-    suspend fun analyze(image: Image, imageRotation: Int): List<DetectedObjectResult> {
+    suspend fun analyze(): List<DetectedObjectResult> {
         // `image` is in YUV (https://developers.google.com/ar/reference/java/com/google/ar/core/Frame#acquireCameraImage()),
 
         // The model performs best on upright images, so rotate it.
@@ -63,7 +63,7 @@ class MLKitObjectDetector(val bitIm : Bitmap, val rot: Int)  {
         return mlKitDetectedObjects.mapNotNull { obj ->
             val bestLabel = obj.labels.maxByOrNull { label -> label.confidence } ?: return@mapNotNull null
             val coords = obj.boundingBox.exactCenterX().toInt() to obj.boundingBox.exactCenterY().toInt()
-            val rotatedCoordinates = coords.rotateCoordinates(rotatedImage.width, rotatedImage.height, imageRotation)
+            val rotatedCoordinates = coords.rotateCoordinates(rotatedImage.width, rotatedImage.height, rot)
             DetectedObjectResult(bestLabel.confidence, bestLabel.text, rotatedCoordinates)
         }
     }

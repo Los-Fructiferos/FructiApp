@@ -44,9 +44,13 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.min
 import kotlin.random.Random
 import com.squareup.picasso.Picasso;
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
-class CameraActivity : AppCompatActivity() {
+class CameraActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private lateinit var binding: ActivitySheetBinding
     var bottomSheetRL: RelativeLayout? = null
     private lateinit var activityCameraBinding: ActivityCameraBinding
@@ -89,12 +93,6 @@ class CameraActivity : AppCompatActivity() {
             tflite,
             FileUtil.loadLabels(this, LABELS_PATH)
         )
-    }
-
-
-
-    private val classi by lazy {
-        Classifier()
     }
 
     private val tfInputSize by lazy {
@@ -332,17 +330,23 @@ class CameraActivity : AppCompatActivity() {
             val rotatedImage = Bitmap.createBitmap(
                 bitmapBuffer, 0, 0, bitmapBuffer.width, bitmapBuffer.height,
                 Matrix().apply { postRotate(imageRotationDegrees.toFloat()) }, false)
-
-            val image = InputImage.fromBitmap(rotatedImage, 0)
-            val x = classi.predict(image)
-            Log.d("CLASSIFICADOR", x.toString())
-            val predicted = x.maxByOrNull { it.score }
-            Log.d(TAG, "Prediction: ${predicted?.label} with confidence ${"%.2f".format(predicted?.score)}")
-            bottomSheetRL = findViewById(R.id.idRLBottomSheet)
-            displayBottomSheet(prediction.label)
+            launch(Dispatchers.Main) {
+                val classiResults = MLKitObjectDetector(bitmapBuffer, imageRotationDegrees).analyze()
+                reportclassifierResults(classiResults.maxByOrNull { it.confidence },
+                    prediction.label, prediction.score)
+            }
         }
     }
 
+    private fun reportclassifierResults(
+        prediction: MLKitObjectDetector.DetectedObjectResult?, detectedClass : String, score: Float
+    ) {
+        bottomSheetRL = findViewById(R.id.idRLBottomSheet)
+        Log.d("MLKit", "reportclassifierResults: $prediction")
+        //🤡 clown math goes here:
+        displayBottomSheet(detectedClass)
+
+    }
     /**
      * Helper function used to map the coordinates for objects coming out of
      * the model into the coordinates that the user sees on the screen.
