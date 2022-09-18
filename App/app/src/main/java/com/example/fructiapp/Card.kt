@@ -1,7 +1,5 @@
 package com.example.fructiapp
 
-import java.util.*
-
- data class Card(var fruta: String? = null,var estado: String?= null, var fecha: String? = null) {
-
-}
+ data class Card(var fruta: String? = "",var estado: String?= "", var fecha: String? = ""){
+  constructor() : this("", "", "")
+ }
