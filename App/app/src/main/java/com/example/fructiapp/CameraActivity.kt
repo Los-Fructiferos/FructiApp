@@ -28,6 +28,8 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.common.internal.ImageUtils
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
@@ -43,9 +45,14 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.min
 import kotlin.random.Random
 import com.squareup.picasso.Picasso;
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
-class CameraActivity : Fragment() {
+class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope() {
     private lateinit var binding: ActivitySheetBinding
     var bottomSheetRL: RelativeLayout? = null
     private lateinit var activityCameraBinding: ActivityCameraBinding
@@ -275,7 +282,7 @@ class CameraActivity : Fragment() {
                     val now = System.currentTimeMillis()
                     val delta = now - lastFpsTimestamp
                     val fps = 1000 * frameCount.toFloat() / delta
-                    Log.d(TAG, "FPS: ${"%.02f".format(fps)} with tensorSize: ${tfImage.width} x ${tfImage.height}")
+                    //Log.d(TAG, "FPS: ${"%.02f".format(fps)} with tensorSize: ${tfImage.width} x ${tfImage.height}")
                     lastFpsTimestamp = now
                 }
             })
@@ -321,11 +328,28 @@ class CameraActivity : Fragment() {
         activityCameraBinding.boxPrediction.visibility = View.VISIBLE
         activityCameraBinding.textPrediction.visibility = View.VISIBLE
         if (pauseAnalysis) {
-            bottomSheetRL = activityCameraBinding.root.findViewById(R.id.idRLBottomSheet)
-            displayBottomSheet(prediction.label)
+            launch(Dispatchers.Main) {
+                val classiResults = MLKitObjectDetector(bitmapBuffer, imageRotationDegrees).analyze()
+                reportclassifierResults(classiResults.maxByOrNull { it.confidence },
+                    prediction.label, prediction.score)
+            }
         }
     }
 
+    private fun reportclassifierResults(
+        prediction: MLKitObjectDetector.DetectedObjectResult?, detectedClass : String, score: Float
+    ) {
+        Log.d("MLKit", "reportclassifierResults: $prediction")
+        //🤡 clown math goes here:
+        //Certeza del Image classifier prediction.confidence
+        //score, certeza del Object Detcetor
+        //prediction.label lo detectado por el Image Classifier
+        //detectedClass lo detectado por el Object Detector
+        //uid del usuario para identificarlo en la base de datos: FirebaseAuth.getInstance().uid
+        
+        displayBottomSheet(detectedClass)
+
+    }
     /**
      * Helper function used to map the coordinates for objects coming out of
      * the model into the coordinates that the user sees on the screen.
