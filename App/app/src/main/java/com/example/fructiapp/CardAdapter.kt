@@ -1,6 +1,5 @@
 package com.example.fructiapp
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import java.text.SimpleDateFormat
 
 class CardAdapter(options: FirestoreRecyclerOptions<Card>): FirestoreRecyclerAdapter<Card, CardAdapter.CardHolder>(options) {
 
@@ -32,7 +32,7 @@ class CardAdapter(options: FirestoreRecyclerOptions<Card>): FirestoreRecyclerAda
     override fun onBindViewHolder(holder: CardHolder, position: Int, model: Card) {
         holder.textViewFruta.text = model.fruta
         holder.textViewEstado.text = model.estado
-        holder.textViewFecha.text = model.fecha
+        holder.textViewFecha.text = SimpleDateFormat("MM/dd/yyyy").format(model.fecha?.toDate())
     }
 
 }

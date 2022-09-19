@@ -1,5 +1,7 @@
 package com.example.fructiapp
 
- data class Card(var fruta: String? = "",var estado: String?= "", var fecha: String? = ""){
-  constructor() : this("", "", "")
- }
+import com.google.firebase.Timestamp
+
+data class Card(var fruta: String? = "",var estado: String?= "", var fecha: Timestamp? = null){
+ constructor() : this("", "", null)
+}
