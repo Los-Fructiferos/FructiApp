@@ -14,6 +14,7 @@ class BottomSheet : BottomSheetDialogFragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        
         return inflater.inflate(R.layout.activity_sheet,container,false)
 
     }
