@@ -13,6 +13,6 @@ class UiActivity:AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.Pager)
         adapter = Adaptador(this)
         viewPager.adapter = adapter
-        viewPager.currentItem = 1
+        viewPager.currentItem = 0
     }
 }

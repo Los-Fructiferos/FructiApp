@@ -8,14 +8,13 @@ class Adaptador(actividad: AppCompatActivity) : FragmentStateAdapter(actividad) 
 
     override fun createFragment(position: Int): Fragment {
         when (position) {
-            0 -> return ConfigFragment.newInstance()
-            1 -> return CameraActivity.newInstance()
-            2 -> return HistorialFragment.newInstance()
+            0 -> return CameraActivity.newInstance()
+            1 -> return HistorialFragment.newInstance()
         }
         return null!!
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return 2
     }
 }

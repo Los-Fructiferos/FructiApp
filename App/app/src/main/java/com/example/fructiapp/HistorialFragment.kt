@@ -35,7 +35,7 @@ class HistorialFragment: Fragment() {
     }
 
     private fun setUpRecyclerView(itemview: View){
-        var query: Query = frutidb.collection("detalle_historial").whereEqualTo("uid",FirebaseAuth.getInstance().uid)
+        var query: Query = frutidb.collection("detalle_historial").whereEqualTo("uid",FirebaseAuth.getInstance().uid).orderBy("fecha",Query.Direction.DESCENDING)
         var opciones: FirestoreRecyclerOptions<Card> = FirestoreRecyclerOptions.Builder<Card>().setQuery(query, Card::class.java).build()
         adaptador = CardAdapter(opciones)
         recyclerView = itemview.findViewById(R.id.recyler_view)
