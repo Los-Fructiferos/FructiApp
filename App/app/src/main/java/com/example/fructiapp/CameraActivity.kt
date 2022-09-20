@@ -355,20 +355,22 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
         
         displayBottomSheet(detectedClass)
 
-        val prediccion = hashMapOf(
-            "fruta" to detectedClass!!.toString(),
-            "estado" to "Comestible",
-            "fecha" to Timestamp(Date()),
-            "uid" to FirebaseAuth.getInstance().uid
-        )
+        if (score >= 80.00){
+            val prediccion = hashMapOf(
+                "fruta" to detectedClass!!.toString(),
+                "estado" to "Comestible",
+                "fecha" to Timestamp(Date()),
+                "uid" to FirebaseAuth.getInstance().uid
+            )
 
-        frutidb.collection("detalle_historial").add(prediccion)
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-            }
+            frutidb.collection("detalle_historial").add(prediccion)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
+        }
     }
     /**
      * Helper function used to map the coordinates for objects coming out of
