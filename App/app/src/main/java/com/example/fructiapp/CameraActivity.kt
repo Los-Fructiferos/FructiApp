@@ -28,6 +28,9 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.fructiapp.databinding.ActivityCameraBinding
 import com.example.fructiapp.databinding.ActivitySheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.common.internal.ImageUtils
 import org.tensorflow.lite.DataType
@@ -49,6 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 /** Activity that displays the camera and performs object detection on the incoming frames */
@@ -69,6 +73,8 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
     private var pauseAnalysis = false
     private var imageRotationDegrees: Int = 0
     private val tfImageBuffer = TensorImage(DataType.UINT8)
+
+    private var frutidb: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     private val tfImageProcessor by lazy {
         val cropSize = minOf(bitmapBuffer.width, bitmapBuffer.height)
@@ -349,6 +355,20 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
         
         displayBottomSheet(detectedClass)
 
+        val prediccion = hashMapOf(
+            "fruta" to detectedClass!!.toString(),
+            "estado" to "Comestible",
+            "fecha" to Timestamp(Date()),
+            "uid" to FirebaseAuth.getInstance().uid
+        )
+
+        frutidb.collection("detalle_historial").add(prediccion)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
     }
     /**
      * Helper function used to map the coordinates for objects coming out of
