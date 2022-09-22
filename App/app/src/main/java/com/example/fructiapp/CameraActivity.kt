@@ -346,19 +346,25 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
         prediction: MLKitObjectDetector.DetectedObjectResult?, detectedClass : String, score: Float
     ) {
         Log.d("MLKit", "reportclassifierResults: $prediction")
+        Log.d("MLKit2", "reportclassifierResults: $detectedClass score: $score")
         //🤡 clown math goes here:
         //Certeza del Image classifier prediction.confidence
         //score, certeza del Object Detcetor
         //prediction.label lo detectado por el Image Classifier
         //detectedClass lo detectado por el Object Detector
         //uid del usuario para identificarlo en la base de datos: FirebaseAuth.getInstance().uid
-        
-        displayBottomSheet(detectedClass)
+        //if prediction.detectedClass contains "rotten"
+        var estado : String = "No se detecto"
+        if (prediction != null) {
+            //ternary operator
+            estado = if (prediction.label.contains("rotten")) "Podrido"  else "No podrido"
+            estado += " con un ${"%.2f".format(prediction.confidence * 100)}% de certeza"
+        }
 
-        if (score >= 80.00){
+        displayBottomSheet(detectedClass)
             val prediccion = hashMapOf(
                 "fruta" to detectedClass!!.toString(),
-                "estado" to "Comestible",
+                "estado" to estado,
                 "fecha" to Timestamp(Date()),
                 "uid" to FirebaseAuth.getInstance().uid
             )
@@ -370,7 +376,6 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
-        }
     }
     /**
      * Helper function used to map the coordinates for objects coming out of
@@ -453,7 +458,7 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
     companion object {
         private val TAG = CameraActivity::class.java.simpleName
 
-        private const val ACCURACY_THRESHOLD = 0.65f
+        private const val ACCURACY_THRESHOLD = 0.68f
         private const val MODEL_PATH = "model.tflite"
         private const val LABELS_PATH = "labels.txt"
 
