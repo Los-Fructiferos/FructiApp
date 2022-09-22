@@ -62,6 +62,11 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
     private lateinit var activityCameraBinding: ActivityCameraBinding
 
     private lateinit var bitmapBuffer: Bitmap
+
+    private lateinit var titulo:String
+    private var estado:String = "Pendiente"
+    private var descripcion:String = "Pendiente IMAGE CLASSIFIER"
+
     private var results: List<ObjectDetectionHelper.ObjectPrediction>? = null
     private val executor = Executors.newSingleThreadExecutor()
     private val permissions = listOf(Manifest.permission.CAMERA)
@@ -187,9 +192,11 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
         val imageIV = layout.findViewById<ImageView>(R.id.idIVimage)
         val desc = layout.findViewById<TextView>(R.id.desc)
 
-        var titulo = label
+        titulo = label
+        /*var titulo = label
         var estado = "Pendiente"
-        var descripcion = "Pendiente IMAGE CLASSIFIER"
+        var descripcion = "Pendiente IMAGE CLASSIFIER"*/
+
 
         val matrix = Matrix().apply {
             postRotate(imageRotationDegrees.toFloat())
@@ -354,11 +361,17 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
         //detectedClass lo detectado por el Object Detector
         //uid del usuario para identificarlo en la base de datos: FirebaseAuth.getInstance().uid
         //if prediction.detectedClass contains "rotten"
-        var estado : String = "No se detecto"
+        //var estado : String = "No se detecto"
         if (prediction != null) {
             //ternary operator
             estado = if (prediction.label.contains("rotten")) "Podrido"  else "No podrido"
             estado += " con un ${"%.2f".format(prediction.confidence * 100)}% de certeza"
+            titulo = detectedClass!!.toString()
+            when (titulo){
+                "Apple" -> descripcion = "Una manzana presenta forma ovoide, aunque con diferente aspecto dependiendo de su desarrollo y variedad, pudiendo disponer de estructura alargada o redonda. Tras una piel muy fina, lisa, brillante y comestible, se esconde una carne jugosa, con abundancia de agua, que encierra en el centro numerosas semillas o pepitas."
+                "Orange" -> descripcion = "La naranja, producto del árbol del naranjo dulce, es una de las frutas más populares. México es uno de los primeros productores a nivel mundial. Su uso más frecuente es en jugo, nutritivo y común especialmente en el desayuno. También se le encuentra en gran cantidad de loncheras escolares, como fruta fresca y golosina para el recreo"
+                "Banana" -> descripcion = "El plátano es una fruta tropical procedente de la planta herbácea que recibe el mismo nombre o banano, perteneciente a la familia de las musáceas. Tiene forma alargada o ligeramente curvada, de 100-200 g de peso."
+            }
         }
 
         displayBottomSheet(detectedClass)
@@ -368,14 +381,15 @@ class CameraActivity : Fragment(), LifecycleOwner, CoroutineScope by MainScope()
                 "fecha" to Timestamp(Date()),
                 "uid" to FirebaseAuth.getInstance().uid
             )
-
-            frutidb.collection("detalle_historial").add(prediccion)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                }
+            if (score >= 0.75) {
+                frutidb.collection("detalle_historial").add(prediccion)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot written with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error adding document", e)
+                    }
+            }
     }
     /**
      * Helper function used to map the coordinates for objects coming out of

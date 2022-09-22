@@ -42,7 +42,7 @@
             android:layout_below="@id/fruta_nombre"
             android:layout_alignParentStart="true"
             android:text="Estado: "
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/white" />
 
         <TextView
@@ -52,7 +52,7 @@
             android:layout_below="@id/fruta"
             android:layout_alignParentEnd="true"
             android:text="Cargar datos de Firestore"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/white" />
 
         <TextView
