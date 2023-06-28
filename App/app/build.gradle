@@ -6,6 +6,9 @@ plugins {
 
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
+
 android {
     compileSdk 32
 
@@ -55,6 +58,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
     implementation 'androidx.camera:camera-core:1.1.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.2.2'
+    implementation 'com.google.firebase:firebase-ml-modeldownloader'//descargar el Modelo
+    implementation 'org.tensorflow:tensorflow-lite:2.3.0'//usar el modelo
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     implementation 'androidx.work:work-runtime-ktx:2.7.0'
