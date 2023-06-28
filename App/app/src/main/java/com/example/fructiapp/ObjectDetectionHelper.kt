@@ -1,0 +1,59 @@
+package com.example.fructiapp
+
+import android.graphics.RectF
+import org.tensorflow.lite.Interpreter
+import org.tensorflow.lite.support.image.TensorImage
+
+/**
+ * Helper class used to communicate between our app and the TF object detection model
+ */
+class ObjectDetectionHelper(private val tflite: Interpreter, private val labels: List<String>) {
+
+    /** Abstraction object that wraps a prediction output in an easy to parse way */
+    data class ObjectPrediction(val location: RectF, val label: String, val score: Float)
+
+    private val locations = arrayOf(Array(OBJECT_COUNT) { FloatArray(4) })
+    private val labelIndices =  arrayOf(FloatArray(OBJECT_COUNT))
+    private val scores =  arrayOf(FloatArray(OBJECT_COUNT))
+
+    private val outputBuffer = mapOf(
+        1 to locations,
+        3 to labelIndices,
+        0 to scores,
+        2 to FloatArray(1)
+    )
+
+    val predictions get() = (0 until OBJECT_COUNT).map {
+        ObjectPrediction(
+
+            location = locations[0][it].let {
+                //formato oficial: https://cloud.google.com/vision/automl/object-detection/docs/csv-format
+                // The locations are an array of [0, 1] floats for [top, left, bottom, right]
+                RectF(
+                    it[1],
+                    it[0],
+                    it[3],
+                    it[2]
+                )
+            },
+
+            // SSD Mobilenet V1 Model assumes class 0 is background class
+            // in label file and class labels start from 1 to number_of_classes + 1,
+            // while outputClasses correspond to class index from 0 to number_of_classes
+            label = labels[labelIndices[0][it].toInt()],
+
+            // Score is a single value of [0, 1]
+            score = scores[0][it]
+        )
+    }
+
+    fun predict(image: TensorImage): List<ObjectPrediction> {
+        tflite.runForMultipleInputsOutputs(arrayOf(image.buffer), outputBuffer)
+        //console log predictions
+        return predictions
+    }
+
+    companion object {
+        const val OBJECT_COUNT = 25
+    }
+}

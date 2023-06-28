@@ -1,7 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="app_name">FructiApp</string>
     <string name="btnFacebook">Button</string>
-    <string name="facebook_app_id">3164988140483731</string>
-    <string name="fb_login_protocol_scheme">fb1234</string>
-    <string name="facebook_client_token">56789</string>
+    <string name="facebook_app_id">443658780857805</string>
+    <string name="fb_login_protocol_scheme">fb443658780857805</string>
+    <string name="facebook_application_id" translatable="false">443658780857805</string>
+    <string name="facebook_client_token">5a0505e366973edf592a54856b0a507d</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb443658780857805</string>
+    <string name="unknown">UNKNOWN</string>
+    <string name="title">Titulo</string>
+    <string name="desc">"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."</string>
+    <string name="state" >Estado</string>
 </resources>
